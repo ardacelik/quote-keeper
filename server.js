@@ -1,7 +1,11 @@
 // Import and initialize Express
 const express = require("express");
+const connectDB = require("./config/db");
 
 const app = express();
+
+// Connect to the database
+connectDB();
 
 app.get("/", (req, res) =>
   res.json({ msg: "Welcome to the Quote Keeper API..." })
