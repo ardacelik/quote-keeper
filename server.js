@@ -7,6 +7,9 @@ const app = express();
 // Connect to the database
 connectDB();
 
+// Init middleware
+app.use(express.json({ extended: false }));
+
 app.get("/", (req, res) =>
   res.json({ msg: "Welcome to the Quote Keeper API..." })
 );
