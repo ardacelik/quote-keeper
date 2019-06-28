@@ -61,15 +61,59 @@ router.post(
 // @route   PUT api/auotes/:id
 // @desc    Update quote
 // @access  Private
-router.put("/:id", (req, res) => {
-  res.send("Update quote");
+router.put("/:id", auth, async (req, res) => {
+  const { quote, author, date } = req.body;
+
+  // Build quote object
+  const quoteFields = {};
+  if (quote) quoteFields.quote = quote;
+  if (author) quoteFields.author = author;
+  if (date) quoteFields.date = date;
+
+  try {
+    let quote = await Quote.findById(req.params.id);
+
+    if (!quote) return res.status(404).json({ msg: "Quote not found" });
+
+    // Make sure user owns quote
+    if (quote.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
+
+    quote = await Quote.findByIdAndUpdate(
+      req.params.id,
+      { $set: quoteFields },
+      { new: true }
+    );
+
+    res.json(quote);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
 });
 
 // @route   DELETE api/quotes/:id
 // @desc    Delete quote
 // @access  Private
-router.delete("/:id", (req, res) => {
-  res.send("Delete quote");
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    let quote = await Quote.findById(req.params.id);
+
+    if (!quote) return res.status(404).json({ msg: "Quote not found" });
+
+    // Make sure user owns quote
+    if (quote.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
+
+    await Quote.findByIdAndRemove(req.params.id);
+
+    res.json({ msg: "Quote removed" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
 });
 
 module.exports = router;
