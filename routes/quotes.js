@@ -22,9 +22,41 @@ router.get("/", auth, async (req, res) => {
 // @route   POST api/quotes
 // @desc    Add new quotes
 // @access  Private
-router.post("/", (req, res) => {
-  res.send("Add quote");
-});
+router.post(
+  "/",
+  [
+    auth,
+    [
+      check("quote", "Quote is required")
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() }); // Show the error if something goes wrong (user will not see this!)
+    }
+
+    const { quote, author, date } = req.body;
+
+    try {
+      const newQuote = new Quote({
+        quote,
+        author,
+        date,
+        user: req.user.id
+      });
+
+      const favouriteQuote = await newQuote.save(); // Save quote to the database
+
+      res.json(favouriteQuote);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  }
+);
 
 // @route   PUT api/auotes/:id
 // @desc    Update quote
