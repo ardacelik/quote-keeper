@@ -10,7 +10,7 @@ import {
   UPDATE_QUOTE,
   FILTER_QUOTES,
   CLEAR_FILTER
-} from "types";
+} from "../types";
 
 const QuoteState = props => {
   const initialState = {
