@@ -4,12 +4,13 @@ import QuoteContext from "../../context/quote/quoteContext";
 
 const QuoteItem = ({ quote }) => {
   const quoteContext = useContext(QuoteContext);
-  const { deleteQuote } = quoteContext;
+  const { deleteQuote, setCurrent, clearCurrent } = quoteContext;
 
   const { id, text, author } = quote;
 
   const onDelete = () => {
     deleteQuote(id);
+    clearCurrent();
   };
 
   return (
@@ -25,7 +26,9 @@ const QuoteItem = ({ quote }) => {
         </blockquote>
       </div>
       <div className="card-footer ">
-        <button className="btn btn-dark">Edit</button>
+        <button className="btn btn-dark" onClick={() => setCurrent(quote)}>
+          Edit
+        </button>
         <button className="btn btn-danger float-right" onClick={onDelete}>
           Delete
         </button>

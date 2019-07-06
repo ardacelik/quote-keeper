@@ -30,7 +30,8 @@ const QuoteState = props => {
         text: "quote 3",
         author: "Celik"
       }
-    ]
+    ],
+    current: null
   };
 
   const [state, dispatch] = useReducer(quoteReducer, initialState);
@@ -46,10 +47,19 @@ const QuoteState = props => {
     dispatch({ type: DELETE_QUOTE, payload: id });
   };
   // Set Current Quote
+  const setCurrent = quote => {
+    dispatch({ type: SET_CURRENT, payload: quote });
+  };
 
   // Clear Current Quote
+  const clearCurrent = () => {
+    dispatch({ type: CLEAR_CURRENT });
+  };
 
   // Update Quote
+  const updateQuote = quote => {
+    dispatch({ type: UPDATE_QUOTE, payload: quote });
+  };
 
   // Filter Quotes
 
@@ -59,8 +69,12 @@ const QuoteState = props => {
     <QuoteContext.Provider
       value={{
         quotes: state.quotes,
+        current: state.current,
         addQuote,
-        deleteQuote
+        deleteQuote,
+        setCurrent,
+        clearCurrent,
+        updateQuote
       }}
     >
       {props.children}
