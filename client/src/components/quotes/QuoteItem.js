@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
+import QuoteContext from "../../context/quote/quoteContext";
 
 const QuoteItem = ({ quote }) => {
+  const quoteContext = useContext(QuoteContext);
+  const { deleteQuote } = quoteContext;
+
   const { id, text, author } = quote;
+
+  const onDelete = () => {
+    deleteQuote(id);
+  };
 
   return (
     <div className="card m-3">
@@ -18,7 +26,9 @@ const QuoteItem = ({ quote }) => {
       </div>
       <div className="card-footer ">
         <button className="btn btn-dark">Edit</button>
-        <button className="btn btn-danger float-right">Delete</button>
+        <button className="btn btn-danger float-right" onClick={onDelete}>
+          Delete
+        </button>
       </div>
     </div>
   );

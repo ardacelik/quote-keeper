@@ -42,7 +42,9 @@ const QuoteState = props => {
   };
 
   // Delete Quote
-
+  const deleteQuote = id => {
+    dispatch({ type: DELETE_QUOTE, payload: id });
+  };
   // Set Current Quote
 
   // Clear Current Quote
@@ -57,7 +59,8 @@ const QuoteState = props => {
     <QuoteContext.Provider
       value={{
         quotes: state.quotes,
-        addQuote
+        addQuote,
+        deleteQuote
       }}
     >
       {props.children}
