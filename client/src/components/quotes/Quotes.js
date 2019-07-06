@@ -1,5 +1,6 @@
 import React, { Fragment, useContext } from "react";
 import QuoteContext from "../../context/quote/quoteContext";
+import QuoteItem from "./QuoteItem";
 
 const Quotes = () => {
   const quoteContext = useContext(QuoteContext);
@@ -10,7 +11,7 @@ const Quotes = () => {
     <div>
       <Fragment>
         {quotes.map(quote => (
-          <h3>{quote.quote}</h3>
+          <QuoteItem key={quote.id} quote={quote} />
         ))}
       </Fragment>
     </div>
