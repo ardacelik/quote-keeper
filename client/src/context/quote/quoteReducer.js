@@ -37,6 +37,19 @@ export default (state, action) => {
         ...state,
         current: null
       };
+    case FILTER_QUOTES:
+      return {
+        ...state,
+        filtered: state.quotes.filter(quote => {
+          const regex = new RegExp(`${action.payload}`, "gi");
+          return quote.text.match(regex) || quote.author.match(regex);
+        })
+      };
+    case CLEAR_FILTER:
+      return {
+        ...state,
+        filtered: null
+      };
     default:
       return state;
   }

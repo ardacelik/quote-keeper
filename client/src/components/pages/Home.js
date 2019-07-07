@@ -1,6 +1,7 @@
 import React from "react";
 import Quotes from "../quotes/Quotes";
-import QuoteFrom from "../quotes/QuoteForm";
+import QuoteForm from "../quotes/QuoteForm";
+import QuoteFilter from "../quotes/QuoteFilter";
 
 const Home = () => {
   return (
@@ -8,10 +9,11 @@ const Home = () => {
       <div className="row">
         <div className="col">
           <div>
-            <QuoteFrom />
+            <QuoteForm />
           </div>
         </div>
         <div className="col">
+          <QuoteFilter />
           <Quotes />
         </div>
       </div>

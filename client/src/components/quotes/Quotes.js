@@ -5,14 +5,18 @@ import QuoteItem from "./QuoteItem";
 const Quotes = () => {
   const quoteContext = useContext(QuoteContext);
 
-  const { quotes } = quoteContext;
+  const { quotes, filtered } = quoteContext;
+
+  if (quotes.length === 0) {
+    return <h4>Please add a quote</h4>;
+  }
 
   return (
     <div>
       <Fragment>
-        {quotes.map(quote => (
-          <QuoteItem key={quote.id} quote={quote} />
-        ))}
+        {filtered !== null
+          ? filtered.map(quote => <QuoteItem key={quote.id} quote={quote} />)
+          : quotes.map(quote => <QuoteItem key={quote.id} quote={quote} />)}
       </Fragment>
     </div>
   );

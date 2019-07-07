@@ -31,7 +31,8 @@ const QuoteState = props => {
         author: "Celik"
       }
     ],
-    current: null
+    current: null,
+    filtered: null
   };
 
   const [state, dispatch] = useReducer(quoteReducer, initialState);
@@ -62,19 +63,28 @@ const QuoteState = props => {
   };
 
   // Filter Quotes
+  const filterQuotes = textToFilter => {
+    dispatch({ type: FILTER_QUOTES, payload: textToFilter });
+  };
 
   // CLear Filter
+  const clearFilter = () => {
+    dispatch({ type: CLEAR_FILTER });
+  };
 
   return (
     <QuoteContext.Provider
       value={{
         quotes: state.quotes,
         current: state.current,
+        filtered: state.filtered,
         addQuote,
         deleteQuote,
         setCurrent,
         clearCurrent,
-        updateQuote
+        updateQuote,
+        filterQuotes,
+        clearFilter
       }}
     >
       {props.children}
