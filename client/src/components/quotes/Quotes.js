@@ -1,4 +1,5 @@
 import React, { Fragment, useContext } from "react";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import QuoteContext from "../../context/quote/quoteContext";
 import QuoteItem from "./QuoteItem";
 
@@ -14,9 +15,19 @@ const Quotes = () => {
   return (
     <div>
       <Fragment>
-        {filtered !== null
-          ? filtered.map(quote => <QuoteItem key={quote.id} quote={quote} />)
-          : quotes.map(quote => <QuoteItem key={quote.id} quote={quote} />)}
+        <TransitionGroup>
+          {filtered !== null
+            ? filtered.map(quote => (
+                <CSSTransition key={quote.id} timeout={500} classNames="item">
+                  <QuoteItem quote={quote} />
+                </CSSTransition>
+              ))
+            : quotes.map(quote => (
+                <CSSTransition key={quote.id} timeout={500} classNames="item">
+                  <QuoteItem quote={quote} />
+                </CSSTransition>
+              ))}
+        </TransitionGroup>
       </Fragment>
     </div>
   );
