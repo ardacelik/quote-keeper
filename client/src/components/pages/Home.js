@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Quotes from "../quotes/Quotes";
 import QuoteForm from "../quotes/QuoteForm";
 import QuoteFilter from "../quotes/QuoteFilter";
+import AuthContext from "../../context/auth/authContext";
 
 const Home = () => {
+  const authContext = useContext(AuthContext);
+
+  useEffect(() => {
+    authContext.loadUser();
+  }, []);
+
   return (
     <div className="container">
       <div className="row">
