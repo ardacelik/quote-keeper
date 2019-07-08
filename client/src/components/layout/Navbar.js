@@ -1,38 +1,55 @@
-import React from "react";
+import React, { Fragment, useContext } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import AuthContext from "../../context/auth/authContext";
 
 const Navbar = ({ title, icon }) => {
+  const authContext = useContext(AuthContext);
+
+  const { isAuthenticated, logout, user } = authContext;
+
+  const onLogout = () => {
+    logout();
+  };
+
+  const authLinks = (
+    <Fragment>
+      <li className="m-2">Hello {user && user.name}</li>
+      <li className="m-2">
+        <a onClick={onLogout} href="#!">
+          <i className="fa fa-sign-out" />{" "}
+          <span className="hide-sm">Logout</span>
+        </a>
+      </li>
+    </Fragment>
+  );
+
+  const guestLinks = (
+    <Fragment>
+      <li className="nav-item active">
+        <Link to="/register" className="nav-link">
+          Register
+        </Link>
+      </li>
+      <li className="nav-item active">
+        <Link to="/login" className="nav-link">
+          Login
+        </Link>
+      </li>
+    </Fragment>
+  );
+
   return (
     <div>
       <nav
         className="navbar navbar-expand-lg navbar-light"
         style={{ backgroundColor: "#e3f2fd" }}
       >
-        <Link to="/" className="navbar-brand">
+        <h1>
           <i className={icon} /> {title}
-        </Link>
+        </h1>
         <ul className="navbar-nav mr-auto">
-          <li className="nav-item active">
-            <Link to="/" className="nav-link">
-              Home
-            </Link>
-          </li>
-          <li className="nav-item active">
-            <Link to="/about" className="nav-link">
-              About
-            </Link>
-          </li>
-          <li className="nav-item active">
-            <Link to="/register" className="nav-link">
-              Register
-            </Link>
-          </li>
-          <li className="nav-item active">
-            <Link to="/login" className="nav-link">
-              Login
-            </Link>
-          </li>
+          {isAuthenticated ? authLinks : guestLinks}
         </ul>
       </nav>
     </div>
