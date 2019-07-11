@@ -6,10 +6,10 @@ const QuoteItem = ({ quote }) => {
   const quoteContext = useContext(QuoteContext);
   const { deleteQuote, setCurrent, clearCurrent } = quoteContext;
 
-  const { id, text, author } = quote;
+  const { _id, text, author } = quote;
 
   const onDelete = () => {
-    deleteQuote(id);
+    deleteQuote(_id);
     clearCurrent();
   };
 
