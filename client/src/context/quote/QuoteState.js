@@ -1,52 +1,115 @@
 import React, { useReducer } from "react";
-import uuid from "uuid";
+import axios from "axios";
 import QuoteContext from "./quoteContext";
 import quoteReducer from "./quoteReducer";
 import {
+  GET_QUOTES,
+  CLEAR_QUOTES,
   ADD_QUOTE,
   DELETE_QUOTE,
   SET_CURRENT,
   CLEAR_CURRENT,
   UPDATE_QUOTE,
   FILTER_QUOTES,
-  CLEAR_FILTER
+  CLEAR_FILTER,
+  QUOTE_ERROR
 } from "../types";
 
 const QuoteState = props => {
   const initialState = {
-    quotes: [
-      {
-        id: 1,
-        text: "quote 1",
-        author: "Arda"
-      },
-      {
-        id: 2,
-        text: "quote 2",
-        author: "Anil"
-      },
-      {
-        id: 3,
-        text: "quote 3",
-        author: "Celik"
-      }
-    ],
+    quotes: null,
     current: null,
-    filtered: null
+    filtered: null,
+    error: null
   };
 
   const [state, dispatch] = useReducer(quoteReducer, initialState);
 
+  // Get Quotes
+  const getQuotes = async () => {
+    try {
+      const res = await axios.get("/api/quotes");
+
+      dispatch({
+        type: GET_QUOTES,
+        payload: res.data
+      });
+    } catch (err) {
+      dispatch({
+        type: QUOTE_ERROR,
+        payload: err.response.msg
+      });
+    }
+  };
+
   // Add Quote
-  const addQuote = quote => {
-    quote.id = uuid.v4();
-    dispatch({ type: ADD_QUOTE, payload: quote });
+  const addQuote = async quote => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    try {
+      const res = await axios.post("/api/quotes", quote, config);
+
+      dispatch({
+        type: ADD_QUOTE,
+        payload: res.data
+      });
+    } catch (err) {
+      dispatch({
+        type: QUOTE_ERROR,
+        payload: err.response.msg
+      });
+    }
   };
 
   // Delete Quote
-  const deleteQuote = id => {
-    dispatch({ type: DELETE_QUOTE, payload: id });
+  const deleteQuote = async id => {
+    try {
+      const res = await axios.delete(`/api/quotes/${id}`);
+
+      dispatch({
+        type: DELETE_QUOTE,
+        payload: id
+      });
+    } catch (err) {
+      dispatch({
+        type: QUOTE_ERROR,
+        payload: err.response.msg
+      });
+    }
   };
+
+  // Update Quote
+  const updateQuote = async quote => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    try {
+      const res = await axios.put(`/api/quotes/${quote._id}`, quote, config);
+
+      dispatch({
+        type: UPDATE_QUOTE,
+        payload: res.data
+      });
+    } catch (err) {
+      dispatch({
+        type: QUOTE_ERROR,
+        payload: err.response.msg
+      });
+    }
+  };
+
+  // Clear Quotes
+  const clearQuotes = () => {
+    dispatch({ type: CLEAR_QUOTES });
+  };
+
   // Set Current Quote
   const setCurrent = quote => {
     dispatch({ type: SET_CURRENT, payload: quote });
@@ -55,11 +118,6 @@ const QuoteState = props => {
   // Clear Current Quote
   const clearCurrent = () => {
     dispatch({ type: CLEAR_CURRENT });
-  };
-
-  // Update Quote
-  const updateQuote = quote => {
-    dispatch({ type: UPDATE_QUOTE, payload: quote });
   };
 
   // Filter Quotes
@@ -78,13 +136,16 @@ const QuoteState = props => {
         quotes: state.quotes,
         current: state.current,
         filtered: state.filtered,
+        error: state.error,
         addQuote,
         deleteQuote,
         setCurrent,
         clearCurrent,
         updateQuote,
         filterQuotes,
-        clearFilter
+        clearFilter,
+        getQuotes,
+        clearQuotes
       }}
     >
       {props.children}
