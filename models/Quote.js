@@ -5,7 +5,7 @@ const QuoteSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "users"
   },
-  quote: {
+  text: {
     type: String,
     required: true
   },

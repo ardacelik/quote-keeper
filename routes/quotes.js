@@ -27,7 +27,7 @@ router.post(
   [
     auth,
     [
-      check("quote", "Quote is required")
+      check("text", "Quote is required")
         .not()
         .isEmpty()
     ]
@@ -38,13 +38,12 @@ router.post(
       return res.status(400).json({ errors: errors.array() }); // Show the error if something goes wrong (user will not see this!)
     }
 
-    const { quote, author, date } = req.body;
+    const { text, author } = req.body;
 
     try {
       const newQuote = new Quote({
-        quote,
+        text,
         author,
-        date,
         user: req.user.id
       });
 
@@ -62,11 +61,11 @@ router.post(
 // @desc    Update quote
 // @access  Private
 router.put("/:id", auth, async (req, res) => {
-  const { quote, author, date } = req.body;
+  const { text, author, date } = req.body;
 
   // Build quote object
   const quoteFields = {};
-  if (quote) quoteFields.quote = quote;
+  if (text) quoteFields.text = text;
   if (author) quoteFields.author = author;
   if (date) quoteFields.date = date;
 
