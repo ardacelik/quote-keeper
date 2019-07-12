@@ -2,14 +2,18 @@ import React, { Fragment, useContext } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import AuthContext from "../../context/auth/authContext";
+import QuoteContext from "../../context/quote/quoteContext";
 
 const Navbar = ({ title, icon }) => {
   const authContext = useContext(AuthContext);
+  const quoteContext = useContext(QuoteContext);
 
   const { isAuthenticated, logout, user } = authContext;
+  const { clearQuotes } = quoteContext;
 
   const onLogout = () => {
     logout();
+    clearQuotes();
   };
 
   const authLinks = (
@@ -48,7 +52,7 @@ const Navbar = ({ title, icon }) => {
         <h1>
           <i className={icon} /> {title}
         </h1>
-        <ul className="navbar-nav mr-auto">
+        <ul className="navbar-nav ml-auto">
           {isAuthenticated ? authLinks : guestLinks}
         </ul>
       </nav>
